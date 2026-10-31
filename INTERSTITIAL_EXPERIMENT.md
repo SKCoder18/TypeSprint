@@ -1,5 +1,13 @@
 # Interstitial experiment: disabled preparation
 
+## Current activation
+
+The owner explicitly approved browser Back instead of an immediate network Close/Skip control. The genuine active Smartlink is now integrated in `components/HomepageClickAds.tsx`, mounted only on `app/page.tsx`. Cloudflare's `TYPESPRINT_INTERSTITIAL_ENABLED` is set to `true`. Existing sponsored-content consent and GPC remain honored. Consent controls, form inputs, editable content, modified clicks and advertising-notice text are excluded from interception. Other homepage clicks count in tab-session storage and redirect on 1, 6, 11, 16… only; the navigation originally clicked is cancelled for that opportunity. Browser Back returns to the homepage, and the visitor can click their intended destination again. All other paths are ignored, including SPA navigation before effect cleanup, and listeners are removed on unmount. No third-party redirect script is injected.
+
+Kill switch: change the Cloudflare flag to `false` and rebuild/deploy with `TYPESPRINT_INTERSTITIAL_ENABLED=false` in the build environment too (homepage HTML is prerendered). For enable builds use `true` consistently at build and runtime. `.env.example` stays disabled by default. `/api/advertising/interstitial` exposes the runtime status. The original interstitial policy is retired and unused. No paid impressions or revenue are inferred from clicks; verified Smartlink statistics remain in Adsterra. Live advertiser links are not self-clicked for testing.
+
+The sections below record the earlier preparation and decisions; the current activation above supersedes their disabled/close-button statements.
+
 ## Updated homepage-only request
 
 The owner superseded the three-visit/24-hour policy with homepage clicks 1, 6, 11, 16, etc. `lib/advertising/homepage-clicks.ts` prepares that exact rule using tab-session storage. Only pathname `/` qualifies; every other route is ignored and cannot advance the count. Consent, GPC, trusted primary clicks and available storage are required. This helper has no script or redirect and is not attached to the document while placement behavior remains unverified. The previous policy below is historical and must not be used for this request.
