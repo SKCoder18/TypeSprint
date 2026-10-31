@@ -1,0 +1,1 @@
+import StoryLibrary from '@/components/StoryLibrary';export default function Page(){return <main className="workspace"><p className="eyebrow">STORY TYPING</p><h1>Read. Type.<br/><em>Discover.</em></h1><StoryLibrary/></main>}

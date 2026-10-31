@@ -1,0 +1,32 @@
+import {TypingEngine} from '../engine';
+export type InputEvent = {type:'CharacterCorrect'|'MistakeRegistered'|'WordCompleted'|'ComboChanged'|'SessionPaused'|'SessionResumed'|'SessionCompleted';accuracy?:number};
+// A pause-aware clock and event adapter keep all typing metrics in the Phase 1 engine.
+export class Challenge {
+ time=0;idle=0;paused=false;reason='';finished=false;awarded=new Set<number>();events:InputEvent[]=[];engine:TypingEngine;
+ constructor(text:string,public inactivity=false){this.engine=new TypingEngine(text,3600,()=>this.time*1000);}
+ emit(type:InputEvent['type'],accuracy?:number){this.events.push({type,accuracy});}
+ pause(reason='Paused'){if(!this.paused&&!this.finished){this.paused=true;this.reason=reason;this.emit('SessionPaused');}}
+ resume(){if(this.paused){this.paused=false;this.idle=0;this.emit('SessionResumed');}}
+ advance(dt:number){if(this.paused||this.finished)return;const step=this.inactivity?Math.min(dt,Math.max(0,5-this.idle)):dt;this.time+=step;this.idle+=step;if(this.inactivity&&this.idle>=5)this.pause('Inactivity — type to resume');this.engine.tick();}
+ key(key:string){if(this.finished||!(key==='Backspace'||key.length===1&&key>=' '&&key<='~'))return;if(this.paused){if(!this.reason.startsWith('Inactivity'))return;this.resume();}this.idle=0;const before=this.engine.snapshot();this.engine.key(key);const after=this.engine.snapshot();if(after.raw>before.raw){this.emit(after.errors>before.errors?'MistakeRegistered':'CharacterCorrect');this.emit('ComboChanged');const i=after.input.length-1;if((this.engine.target[i]===' '||after.state==='finished')&&!this.awarded.has(i)){this.awarded.add(i);const start=this.engine.target.lastIndexOf(' ',i-1)+1;const target=this.engine.target.slice(start,i+1);const typed=after.input.slice(start,i+1);const correct=[...target].filter((c,j)=>c===typed[j]).length;this.emit('WordCompleted',correct/target.length);}}if(after.state==='finished'){this.finished=true;this.emit('SessionCompleted');}}
+ drain(){const result=this.events;this.events=[];return result;}
+}
+export type Difficulty='Easy'|'Medium'|'Hard';
+export const tuning={Easy:{interval:7,damage:5,pace:20},Medium:{interval:5,damage:8,pace:40},Hard:{interval:3,damage:11,pace:65}};
+export const words={Easy:'wind moon leaf star calm swift blade spark light river',Medium:'silent thunder lantern crystal phantom courage horizon',Hard:'precision silhouette resilience equilibrium extraordinary momentum'};
+export class Combat {
+ lastWord='';lastDamage=0;hp=100;enemy=100;energy=0;combo=0;elapsed=0;attackClock=0;attacks=0;shield=false;dodge=0;flash=0;enemyFlash=0;action='Ready';outcome='';phase=1;
+ constructor(public difficulty:Difficulty,public shadow=false){}
+ get maxEnemy(){return this.shadow&&this.phase===2?160:100;}
+ event(event:InputEvent){if(this.outcome)return;if(event.type==='MistakeRegistered'){this.combo=0;this.energy=Math.max(0,this.energy-3);}if(event.type==='WordCompleted'){const accuracy=event.accuracy??0;const minimum=this.difficulty==='Hard'?.85:.6;if(accuracy<minimum){this.action='Glancing strike — aim for accuracy';return;}this.combo++;this.energy=Math.min(100,this.energy+15);this.hit((10+Math.min(this.combo,8))*accuracy,'Blade strike');}}
+ hit(damage:number,label:string){this.enemy=Math.max(0,this.enemy-damage);this.flash=.7;this.lastDamage=Math.round(damage);this.action=label;if(this.enemy===0){if(this.shadow&&this.phase===1){this.phase=2;this.enemy=160;this.attackClock=0;this.action='THE ECLIPSE WARDEN AWAKENS';}else this.outcome='Victory';}}
+ ability(name:string){if(this.outcome)return false;const costs:Record<string,number>={'Special strike':60,'Shadow Slash':30,'Phantom Strike':60,'Dark Shield':25,'Shadow Dash':20};const cost=costs[name];if(!cost||this.energy<cost)return false;this.energy-=cost;if(name==='Dark Shield'){this.shield=true;this.action='Dark Shield armed';}else if(name==='Shadow Dash'){this.dodge=2;this.action='Shadow Dash — invulnerable for 2 seconds';}else this.hit(name==='Phantom Strike'?45:name==='Shadow Slash'?23:40,name);return true;}
+ update(dt:number){if(this.outcome)return;this.elapsed+=dt;this.flash=Math.max(0,this.flash-dt);this.enemyFlash=Math.max(0,this.enemyFlash-dt);this.dodge=Math.max(0,this.dodge-dt);this.attackClock+=dt;const cfg=tuning[this.difficulty];const interval=cfg.interval*(this.shadow&&this.phase===2?.75:1);while(this.attackClock>=interval&&!this.outcome){this.attackClock-=interval;this.attacks++;const heavy=this.shadow&&this.attacks%3===0;let damage=cfg.damage*(heavy?2:1);if(this.dodge>0)damage=0;else if(this.shield){damage*=.2;this.shield=false;}this.hp=Math.max(0,this.hp-damage);this.enemyFlash=.5;this.action=damage===0?'Dodged!':heavy?'Warden rupture!':'Enemy strike';if(!this.hp)this.outcome='Defeat';}}
+ get warning(){return this.shadow&&this.attacks%3===2?'RUPTURE INCOMING — shield or dash': 'Enemy preparing strike';}
+}
+export class Race {
+ combo=0;aiSpeed=0;boost=0;countdown=3;speed=0;distance=0;aiDistance=0;elapsed=0;penalty=0;outcome='';length=1400;
+ constructor(public difficulty:Difficulty){}
+ event(e:InputEvent){if(this.outcome||this.countdown>0)return;if(e.type==='CharacterCorrect')this.speed=Math.min(105,this.speed+6);if(e.type==='WordCompleted'&&(e.accuracy??0)>=.95){this.combo++;this.speed=Math.min(110,this.speed+7+Math.min(5,this.combo));this.boost=.8;}if(e.type==='MistakeRegistered'){this.combo=0;this.speed*=this.difficulty==='Easy'?.8:this.difficulty==='Hard'?.55:.65;this.penalty=1;}}
+ update(dt:number){if(this.outcome)return;if(this.countdown>0){const remaining=Math.max(0,dt-this.countdown);this.countdown=Math.max(0,this.countdown-dt);if(remaining)this.update(remaining);return;}this.elapsed+=dt;this.boost=Math.max(0,this.boost-dt);const old=this.distance,aiOld=this.aiDistance;this.speed=Math.max(0,this.speed-(this.penalty>0?15:8)*dt);this.penalty=Math.max(0,this.penalty-dt);const pace=tuning[this.difficulty].pace;const aiSpeed=pace*.8*(this.difficulty==='Easy'&&Math.floor(this.elapsed)%11<2?.6:1);this.distance+=this.speed*dt;this.aiSpeed=aiSpeed;this.aiDistance+=aiSpeed*dt;if(this.distance>=this.length||this.aiDistance>=this.length){const playerFraction=this.distance>=this.length?(this.length-old)/(this.distance-old):Infinity;const aiFraction=this.aiDistance>=this.length?(this.length-aiOld)/(this.aiDistance-aiOld):Infinity;this.outcome=playerFraction<=aiFraction?'Victory':'Defeat';this.distance=Math.min(this.length,this.distance);this.aiDistance=Math.min(this.length,this.aiDistance);}}
+}

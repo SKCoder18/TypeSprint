@@ -1,0 +1,1 @@
+import OnlineRace from '@/components/games/OnlineRace';export const metadata={title:'Online 1v1 typing races · TypeSprint',description:'Race a real player in private rooms or Quick Match.'};export default OnlineRace;

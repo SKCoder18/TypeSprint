@@ -1,0 +1,3 @@
+export function supabaseConfig(env:Record<string,string|undefined>=process.env){const url=env.SUPABASE_URL;const key=env.SUPABASE_PUBLISHABLE_KEY||env.SUPABASE_ANON_KEY;const secret=env.SUPABASE_SECRET_KEY||env.SUPABASE_SERVICE_ROLE_KEY;if(!url||!key)throw new Error('Supabase setup incomplete: add SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY (or legacy SUPABASE_ANON_KEY) to .env.local.');return {url:url.replace(/\/$/,''),key,secret};}
+export function apiHeaders(key:string,token?:string):Record<string,string>{return {apikey:key,...(token?{Authorization:'Bearer '+token}:key.startsWith('eyJ')?{Authorization:'Bearer '+key}:{})};}
+

@@ -1,0 +1,1 @@
+'use client';export default function ErrorPage({reset}:{reset:()=>void}){return <main className="workspace"><h1>Let’s try <em>again.</em></h1><p>This page could not load. Your browser-local progress is preserved.</p><button className="button" onClick={reset}>Retry</button></main>}

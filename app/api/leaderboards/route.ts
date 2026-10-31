@@ -1,0 +1,2 @@
+import {NextRequest,NextResponse} from 'next/server';import {supabase,failure} from '@/lib/server/supabase';
+export async function GET(request:NextRequest){try{const sort=request.nextUrl.searchParams.get('sort')??'wins';if(!['wins','wpm','rating'].includes(sort))throw new Error('Invalid ranking.');const rows=await supabase('/rest/v1/rpc/race_leaderboard',{method:'POST',body:JSON.stringify({weekly:request.nextUrl.searchParams.get('period')==='week',sort_by:sort})});return NextResponse.json({rows});}catch(e){return failure(e,503);}}

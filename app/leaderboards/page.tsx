@@ -1,0 +1,1 @@
+import Leaderboards from '@/components/account/Leaderboards';export const metadata={title:'Verified race leaderboards · TypeSprint',description:'Compare server-validated racing wins, WPM and rating.'};export default Leaderboards;
