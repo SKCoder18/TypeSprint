@@ -1,4 +1,12 @@
-# Phase 3 operator setup
+# Current production setup
+
+The Vercel website uses browser-local profiles without email confirmation. `/api/race` accepts a random per-profile player capability, never the local email or password. All local-profile races, including Quick Match, are unranked and never write verified leaderboards.
+
+Apply `supabase/live-race-setup.sql` once. Keep `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` and the exact production `SITE_URL` in Vercel's server environment. Live rooms use server-only Supabase storage with revision-checked atomic updates and replay the existing race simulation on each request. The separate `race:server` process is no longer required by the website. Public and authenticated Supabase keys have no access to room storage.
+
+This initial deployment supports 20 retained rooms. Waiting rooms expire after five minutes, inactive connections after 30 seconds, and finished rooms are removed on subsequent requests after two minutes. Global optimistic concurrency favors a small deployment; load testing and partitioning room storage are needed before expanding capacity. Server timestamps and sequence checks govern movement; local profiles are not verified identities.
+
+# Legacy verified-account server setup
 
 No resources were created and nothing was publicly deployed. The application uses Supabase's Auth and PostgREST HTTP APIs through server routes; no browser service-role key or extra SDK is required.
 
