@@ -1,5 +1,13 @@
 # Interstitial experiment: disabled preparation
 
+## Updated homepage-only request
+
+The owner superseded the three-visit/24-hour policy with homepage clicks 1, 6, 11, 16, etc. `lib/advertising/homepage-clicks.ts` prepares that exact rule using tab-session storage. Only pathname `/` qualifies; every other route is ignored and cannot advance the count. Consent, GPC, trusted primary clicks and available storage are required. This helper has no script or redirect and is not attached to the document while placement behavior remains unverified. The previous policy below is historical and must not be used for this request.
+
+A genuine Smartlink placement was requested through the existing Adsterra publisher account with adult ads off. Adsterra acknowledged activation in progress. This is a publisher placement, not a paid advertiser campaign. Activation and immediate dismissal/return behavior must be verified before enabling homepage redirects. No game, navigation component, homepage design or Native Banner was changed.
+
+The dashboard subsequently confirmed Smartlink `32025964` Active and supplied genuine code. Its only displayed usage instruction is to insert it using standard HTML hyperlink tags. This does not verify a network-provided immediate Close/Skip control or approval for intercepting arbitrary navigation clicks. No live ad link was clicked for testing. Per the original stop condition, arbitrary-click redirects remain disabled pending provider confirmation of this use and closing behavior. The new homepage helper's four focused tests plus the existing Native Banner consent test passed, and the single Cloudflare production build passed. It is preparation, not a mounted click listener or live redirect integration.
+
 Checked the existing Adsterra website on 1 November 2026: only Native Banner `32025334` is Active. No approved interstitial/Social Bar zone or genuine code is available. Native Banner approval is not interstitial approval. No new zone, campaign, paid service or support message was created.
 
 `TYPESPRINT_INTERSTITIAL_ENABLED=false` is configured for Cloudflare and documented in `.env.example`. `/api/advertising/interstitial` exposes only public status with no-store caching. Even `true` remains effectively disabled because approval is unverified. No client component, network adapter, ad script, overlay or fake advertisement is installed. Existing Native Banner code and all gameplay are unchanged.
