@@ -1,0 +1,17 @@
+# Interstitial experiment: disabled preparation
+
+Checked the existing Adsterra website on 1 November 2026: only Native Banner `32025334` is Active. No approved interstitial/Social Bar zone or genuine code is available. Native Banner approval is not interstitial approval. No new zone, campaign, paid service or support message was created.
+
+`TYPESPRINT_INTERSTITIAL_ENABLED=false` is configured for Cloudflare and documented in `.env.example`. `/api/advertising/interstitial` exposes only public status with no-store caching. Even `true` remains effectively disabled because approval is unverified. No client component, network adapter, ad script, overlay or fake advertisement is installed. Existing Native Banner code and all gameplay are unchanged.
+
+The isolated policy prepares consent-aware browser session counting, three visits per opportunity, a rolling 24-hour cap, reservation before requests, and fail-closed storage handling. Reloads, navigation and restarts within one session do not count again. Only explicit natural transitions to an informational-page allowlist qualify; gameplay, paused sessions, media, authentication and submission are excluded. The policy is deliberately not connected to application events while approval is missing.
+
+Measurement is also preparation only: bounded local aggregate event counters for visits, opportunities, request attempts, officially confirmed displays/dismissals, errors, typing starts/completions and early exits. No typed content, identities, server analytics or revenue estimates are collected. Counters are not wired to gameplay and no network events are emitted. There is currently no reliable control group, site-wide analytics or return-rate measurement; any later comparison must be described as observational, not causal.
+
+Before activation, obtain Adsterra approval and genuine code for a separate experimental zone and confirm that it supports immediate functional dismissal, no forced redirects, and the required lifecycle callbacks. Ask Adsterra support if the publisher interface cannot provide that format. Do not substitute Native Banner or generic Social Bar code. Implement the verified adapter only after these checks, serialize reservations across tabs using Web Locks (decline if unavailable), refresh the server flag before every request, and wire real session lifecycle metrics without affecting typing input. Missing callbacks must remain unavailable metrics; script loading never counts as an impression.
+
+Emergency stop: set `TYPESPRINT_INTERSTITIAL_ENABLED=false` in the server deployment configuration and deploy/refresh. A future adapter must honor this before new requests and support immediate cleanup/dismissal. Today there is no active adapter to stop. Native Banner remains independent.
+
+Revenue must come from verified Adsterra zone statistics. Compare actual revenue per 1,000 measured visits and completions per visit over comparable periods only after a valid measurement implementation exists. No revenue or interstitial impression has been claimed.
+
+Validation: seven focused tests passed, including the existing Native Banner consent test. The Cloudflare production build passed. There is no interstitial overlay, script injection or dismissal/navigation interaction to exercise until an approved adapter exists; live display, official callbacks, cross-tab locking and gameplay lifecycle analytics are intentionally pending approval.
