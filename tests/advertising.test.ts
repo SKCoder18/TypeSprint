@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';import InformationalAdSlot from '../components/InformationalAdSlot';
+test('homepage advertising sends no third-party content before a consent choice',()=>{const html=renderToStaticMarkup(React.createElement(InformationalAdSlot));assert.match(html,/Allow sponsored content/);assert.match(html,/Keep ads off/);assert.match(html,/Privacy details/);assert.doesNotMatch(html,/<iframe|<script|bauval\.org/);});

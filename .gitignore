@@ -6,3 +6,8 @@ node_modules/
 !.env.example
 
 .asset-tools/
+/dist/
+.vinext/
+.cloudflare/
+.dev.vars*
+.wrangler/

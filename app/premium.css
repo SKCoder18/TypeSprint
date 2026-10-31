@@ -7,6 +7,14 @@
   --premium-glow: 0 8px 28px #00d9db18;
   color-scheme: dark;
 }
+.sponsor-panel{max-width:1200px;margin:40px auto 70px;padding:32px;border:1px solid #354965;border-radius:14px;background:#101a2e;contain:layout;}
+.sponsor-panel h2{font-size:27px;letter-spacing:-.8px;}
+.sponsor-panel>p{color:#abc0db;line-height:1.8;max-width:800px;}
+.sponsor-panel .sponsor-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;}
+.sponsor-panel iframe{display:block;width:100%;border:0;margin:18px 0;}
+.sponsor-panel .actions{flex-wrap:wrap;gap:16px;}
+.sponsor-panel .actions a{font-size:13px;color:#a5eee9;}
+@media(max-width:700px){.sponsor-panel{margin:24px 20px 50px;padding:22px;}}
 html body { background-color:#080e1f; }
 body button, body .button, body summary {
   position:relative;
