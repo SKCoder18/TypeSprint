@@ -1,6 +1,6 @@
 # Current production setup
 
-The Vercel website uses browser-local profiles without email confirmation. `/api/race` accepts a random per-profile player capability, never the local email or password. All local-profile races, including Quick Match, are unranked and never write verified leaderboards.
+The Vercel website uses browser-local profiles without email confirmation. `/api/race` accepts a random per-profile player capability, never the local email or password. Completed local-profile races, including private rooms and Quick Match, save community leaderboard totals atomically with room state. These scores are not verified identities and never write the legacy verified-account leaderboard. Highest WPM is retained across lower later results; duplicate polls cannot award a match twice. All-time totals and the most recent eight active weekly buckets per player survive room cleanup.
 
 Apply `supabase/live-race-setup.sql` once. Keep `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` and the exact production `SITE_URL` in Vercel's server environment. Live rooms use server-only Supabase storage with revision-checked atomic updates and replay the existing race simulation on each request. The separate `race:server` process is no longer required by the website. Public and authenticated Supabase keys have no access to room storage.
 
