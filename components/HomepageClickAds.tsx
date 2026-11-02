@@ -2,7 +2,7 @@
 import {useEffect} from 'react';
 import {usePathname} from 'next/navigation';
 import {countHomepageClick} from '@/lib/advertising/homepage-clicks';
-import {homepageSmartlink} from '@/lib/advertising/homepage-config';
+import {homepagePlacement} from '@/lib/advertising/homepage-config';
 
 export default function HomepageClickAds({enabled}:{enabled:boolean}) {
   const pathname = usePathname();
@@ -25,7 +25,7 @@ export default function HomepageClickAds({enabled}:{enabled:boolean}) {
         if (!result.opportunity) return;
         event.preventDefault();
         event.stopImmediatePropagation();
-        window.location.assign(homepageSmartlink);
+        window.location.assign(homepagePlacement(window.location.hostname).smartlink);
       } catch { /* Storage unavailable: keep normal navigation working. */ }
     }
     document.addEventListener('click', onClick, true);

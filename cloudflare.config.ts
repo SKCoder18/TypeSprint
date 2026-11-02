@@ -16,6 +16,7 @@ export default defineConfig({
     env: {
       ASSETS: bindings.assets(),
       SITE_URL: bindings.text("https://typesprint.typesprint-sk18.workers.dev"),
+      CANONICAL_SITE_URL: bindings.text("https://typeloria.pages.dev"),
       TYPESPRINT_INTERSTITIAL_ENABLED: bindings.text("true"),
       SUPABASE_URL: bindings.secret(),
       SUPABASE_PUBLISHABLE_KEY: bindings.secret(),

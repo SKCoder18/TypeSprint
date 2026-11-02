@@ -1,0 +1,7 @@
+{
+  "name": "typeloria",
+  "pages_build_output_dir": "./public",
+  "compatibility_date": "2026-11-02",
+  "vars": {"PUBLIC_ORIGIN": "https://typeloria.pages.dev"},
+  "services": [{"binding": "APP", "service": "typesprint"}]
+}
