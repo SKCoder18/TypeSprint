@@ -1,4 +1,4 @@
-export const metadata={title:'Free Typing Test, WPM Practice & Games | TypeSprint',description:'Check your typing speed and accuracy with a free WPM test. Build your skills with beginner lessons, original stories and typing games. No account needed for practice.',alternates:{canonical:'/'},openGraph:{title:'Free Typing Test, WPM Practice & Games | TypeSprint',description:'Check your WPM and accuracy, learn touch typing and practice with stories and games.',url:'/'}};
+export const metadata={title:'Free Typing Test, WPM Practice & Games | Typeloria',description:'Check your typing speed and accuracy with a free WPM test. Build your skills with beginner lessons, original stories and typing games. No account needed for practice.',alternates:{canonical:'/'},openGraph:{siteName:'Typeloria',title:'Free Typing Test, WPM Practice & Games | Typeloria',description:'Check your WPM and accuracy, learn touch typing and practice with stories and games.',url:'/'}};
 import HomepageClickAds from '@/components/HomepageClickAds';
 import {homepageAdConfiguration} from '@/lib/advertising/homepage-config';
 import InformationalAdSlot from '@/components/InformationalAdSlot';

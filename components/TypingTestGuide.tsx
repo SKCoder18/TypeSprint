@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function TypingTestGuide() {
   return <section className="article" aria-labelledby="typing-test-guide">
     <h2 id="typing-test-guide">How to check your typing speed</h2>
-    <p>Choose a 15-second, 30-second, one-minute or two-minute test above, then click the passage and type on a physical keyboard. Your first character starts the timer. TypeSprint shows your words per minute (WPM) and accuracy as you go. When the test ends, review your results or choose a new passage. No account is needed for this test.</p>
+    <p>Choose a 15-second, 30-second, one-minute or two-minute test above, then click the passage and type on a physical keyboard. Your first character starts the timer. Typeloria shows your words per minute (WPM) and accuracy as you go. When the test ends, review your results or choose a new passage. No account is needed for this test.</p>
     <h3>What does WPM mean?</h3>
     <p>WPM means words per minute. This test treats five characters as one word: correct characters remaining in your typed text ÷ 5 ÷ elapsed minutes. For example, 200 correct characters in one minute gives 40 WPM. This is a practice result, not a certified typing qualification.</p>
     <h3>Why does accuracy matter?</h3>

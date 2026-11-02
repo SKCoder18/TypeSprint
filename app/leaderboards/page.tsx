@@ -1,1 +1,1 @@
-import Leaderboards from '@/components/account/Leaderboards';export const metadata={title:'Community race leaderboards · TypeSprint',description:'Compare highest WPM, wins and rating from completed online races.'};export default Leaderboards;
+import Leaderboards from '@/components/account/Leaderboards';export const metadata={title:'Community race leaderboards · Typeloria',description:'Compare highest WPM, wins and rating from completed online races.'};export default Leaderboards;
